@@ -1,12 +1,18 @@
+import { sqlConnection } from "../database/sqlConnection.ts"
+
 
 export const loginController  = (app: any) => {
-
-	app.get("/login", login)
+	app.get("/login", login, test)
 	.post("/register", register)
 }
+const test = (next:any) => () => {
+	console.log("here in mw");
+	next();
+}
 
-const register = () => {
-	return "register function"
+const register = async () => {
+	const client  = sqlConnection;
+	return await client.query('SELECT * FROM `demo-api`.users;');
 }
 
 
