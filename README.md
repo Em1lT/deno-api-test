@@ -1,2 +1,8 @@
-### Fun project with deno
-#### WIP
+## Fun project with deno
+### WIP
+
+
+#### Endpoints:
+
+	/login
+	/register
