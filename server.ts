@@ -5,7 +5,7 @@ import { notesController } from "./controllers/notesController.ts"
 
 const app = new Application();
 
-//app.use(log);
+app.use(log);
 
 loginController(app);
 notesController(app);

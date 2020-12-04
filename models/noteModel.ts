@@ -10,16 +10,16 @@ export const getAll  = async () => {
 	try {
 		return await client.query('SELECT * FROM `demo-api`.notes;');
 	} catch (e: any) {
-		return e;
+		return await e;
 	}
 }
 
 export const getOne = async (id: number) => {
-	const client  = sqlConnection;
 	try {
+		const client  = sqlConnection;	
 		return await client.query('SELECT * FROM `demo-api`.notes WHERE id = '+ id + ';');
 	} catch (e: any) {
-		return e;
+		return await e;
 	}
 }
 
@@ -30,7 +30,7 @@ export const postOne = async (message: String) => {
 		return await getOne(que.lastInsertId!);
 	} catch (e: any) {
 		console.log(e);
-		return e;
+		return await e;
 	}
 }
 

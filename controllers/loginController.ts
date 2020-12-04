@@ -9,7 +9,7 @@ export const loginController  = (app: any) => {
 }
 
 const register: HandlerFunc = async (context: any) => {
-	context.json("paska", 200);
+	context.json("test", 200);
 }
 
 
