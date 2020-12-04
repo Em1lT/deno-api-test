@@ -1,8 +1,17 @@
-## Fun project with deno
+## Fun project with Deno
 ### WIP
 
 
 #### Endpoints:
 
-	/login
-	/register
+	[GET]	/login
+	[POST]	/register
+	[GET]	/notes
+	[GET]	/notes/:id
+	[POST]	/notes
+
+
+#### DENO
+	
+
+	[Deno](https://deno.land/)
