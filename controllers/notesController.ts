@@ -2,7 +2,7 @@ import { HandlerFunc } from "https://deno.land/x/abc/types.ts";
 import { Context } from "https://deno.land/x/abc/mod.ts";
 import { getAll as NotesGetAll, getOne, postOne } from "../models/noteModel.ts"
 import { Note } from "../models/interfaces/note.ts"
-import { successResponse, errorResponse } from "../handers/responseHandler.ts"
+import { successResponse, errorResponse } from "../handlers/responseHandler.ts"
 
 export const notesController  = (app: any) => {
 
@@ -10,6 +10,8 @@ export const notesController  = (app: any) => {
 	.get("/notes/:id", getOneNote)
 	.post("/notes", postNote)
 	.put("/notes", (data: any) => {return data.json("put notes")});
+
+	console.log("notesController enabled!");
 }
 
 //TODO: Handle params

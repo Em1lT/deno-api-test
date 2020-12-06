@@ -5,7 +5,7 @@ import { Note } from "./interfaces/note.ts"
 
 
 //SAFER QUERIES!!!!!!!
-export const getAll  = async () => {
+export const getAll: Function = async () => {
 	const client  = sqlConnection;
 	try {
 		return await client.query('SELECT * FROM `demo-api`.notes;');
@@ -14,7 +14,7 @@ export const getAll  = async () => {
 	}
 }
 
-export const getOne = async (id: number) => {
+export const getOne: Function = async (id: number) => {
 	try {
 		const client  = sqlConnection;	
 		return await client.query('SELECT * FROM `demo-api`.notes WHERE id = '+ id + ';');
@@ -23,7 +23,7 @@ export const getOne = async (id: number) => {
 	}
 }
 
-export const postOne = async (message: String) => {
+export const postOne: Function = async (message: String) => {
 	const client  = sqlConnection;
 	try {
 		const que = await client.execute('INSERT INTO `demo-api`.notes (`message`) VALUES ("'+message+'");');	
@@ -32,6 +32,10 @@ export const postOne = async (message: String) => {
 		console.log(e);
 		return await e;
 	}
+}
+
+export const deleteOne: Function = async (id: any) => {
+	//TODO: deleteOne
 }
 
 

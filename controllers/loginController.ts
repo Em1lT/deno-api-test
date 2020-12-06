@@ -6,6 +6,8 @@ export const loginController  = (app: any) => {
 
 	app.get("/login", login)	
 	.post("/register", register)
+	console.log("loginController enabled!");
+
 }
 
 const register: HandlerFunc = async (context: any) => {
@@ -13,6 +15,6 @@ const register: HandlerFunc = async (context: any) => {
 }
 
 
-const login = async (context: any) => {
+const login: Function = async (context: any) => {
 	return context.json("Login function");
 }
