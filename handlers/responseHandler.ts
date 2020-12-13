@@ -6,5 +6,5 @@ export const successResponse: Function  = async(context: any,response: any) => {
 }
 
 export const errorResponse: Function = async (context: any, error: any, statusCode: number) => {
-	context.string(error, statusCode);
+	context.json({error:error, statusCode:statusCode}, statusCode);
 }

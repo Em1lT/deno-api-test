@@ -4,7 +4,6 @@ import { Note } from "./interfaces/note.ts"
 
 
 
-//SAFER QUERIES!!!!!!!
 export const getAll: Function = async () => {
 	const client  = sqlConnection;
 	try {
@@ -26,17 +25,29 @@ export const getOne: Function = async (id: number) => {
 export const postOne: Function = async (message: String) => {
 	const client  = sqlConnection;
 	try {
-		const que = await client.execute('INSERT INTO `demo-api`.notes (`message`) VALUES ("'+message+'");');	
-		return await getOne(que.lastInsertId!);
+		const queue = await client.execute('INSERT INTO `demo-api`.notes (`message`) VALUES ("'+message+'");');	
+		return await getOne(queue.lastInsertId!);
 	} catch (e: any) {
-		console.log(e);
 		return await e;
 	}
 }
 
-export const deleteOne: Function = async (id: any) => {
-	//TODO: deleteOne
+export const putOne: Function = async (message: String, id: number) => {
+	const client  = sqlConnection;
+	try {
+		const queue = await client.execute('UPDATE `demo-api`.notes SET `message` =("'+message+'") WHERE (id = '+id+');');	
+		return await getOne(id);
+	} catch (e: any) {
+		return await e;
+	}
 }
 
-
-//TODO: PUT
+export const deleteOne: Function = async (id: number) => {
+	const client  = sqlConnection;
+	try {
+		const queue = await client.execute('DELETE FROM `demo-api`.notes WHERE (id = '+id+'');
+		return await {status:"success", id: id};
+	} catch (e: any) {
+		throw new Error(e);
+	}
+}
