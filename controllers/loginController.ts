@@ -1,6 +1,5 @@
 import { HandlerFunc  } from "https://deno.land/x/abc/types.ts";
-
-
+import { successResponse, errorResponse } from "../handlers/responseHandler.ts"
 
 export const loginController  = (app: any) => {
 
@@ -16,5 +15,5 @@ const register: HandlerFunc = async (context: any) => {
 
 
 const login: Function = async (context: any) => {
-	return context.json("Login function");
+	errorResponse("err", context, 403);
 }

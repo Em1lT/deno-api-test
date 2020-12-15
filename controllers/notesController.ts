@@ -1,12 +1,13 @@
 import { HandlerFunc } from "https://deno.land/x/abc/types.ts";
 import { Context } from "https://deno.land/x/abc/mod.ts";
 import { getAll as NotesGetAll, getOne, postOne, putOne, deleteOne } from "../models/noteModel.ts"
-import { Note } from "../models/interfaces/note.ts"
-import { successResponse, errorResponse } from "../handlers/responseHandler.ts"
+import { Note } from "../models/interfaces/note.ts";
+import { successResponse, errorResponse } from "../handlers/responseHandler.ts";
+import { auth } from "./authController.ts";
 
 export const notesController  = (app: any) => {
 
-	app.get("/notes", getAllNotes)
+	app.get("/notes",  getAllNotes, auth)
 	.get("/notes/:id", getOneNote)
 	.post("/notes", postNote)
 	.put("/notes/:id", updateNote)

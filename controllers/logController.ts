@@ -1,4 +1,4 @@
-import { MiddlewareFunc, HandlerFunc } from "https://deno.land/x/abc/types.ts";
+import { MiddlewareFunc } from "https://deno.land/x/abc/types.ts";
 
 export const log: MiddlewareFunc = (next: any) => async (data:any) => {
 	const id = createId();
