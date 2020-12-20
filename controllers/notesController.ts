@@ -8,10 +8,10 @@ import { auth } from "./authController.ts";
 export const notesController  = (app: any) => {
 
 	app.get("/notes",  getAllNotes, auth)
-	.get("/notes/:id", getOneNote)
-	.post("/notes", postNote)
-	.put("/notes/:id", updateNote)
-	.delete("/notes/:id", deleteNote);
+	.get("/notes/:id", getOneNote, auth)
+	.post("/notes", postNote, auth)
+	.put("/notes/:id", updateNote, auth)
+	.delete("/notes/:id", deleteNote, auth);
 
 	console.log("notesController enabled!");
 }

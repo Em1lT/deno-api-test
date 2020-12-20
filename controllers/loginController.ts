@@ -6,7 +6,6 @@ export const loginController  = (app: any) => {
 	app.get("/login", login)	
 	.post("/register", register)
 	console.log("loginController enabled!");
-
 }
 
 const register: HandlerFunc = async (context: any) => {
