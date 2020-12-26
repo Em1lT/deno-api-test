@@ -2,6 +2,7 @@ import { HandlerFunc  } from "https://deno.land/x/abc/types.ts";
 import { successResponse, errorResponse } from "../handlers/responseHandler.ts"
 import { User } from "../models/interfaces/user.ts"
 import { register, login, getOne, getByName } from "../models/userModel.ts"
+import { createJwtToken } from '../helpers/jwt.ts'
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 
 export const loginController  = (app: any) => {
@@ -36,6 +37,7 @@ const loginUser: Function = async (context: any) => {
 			return await errorResponse(context, "Wrong password!", 400);
 		}
 		delete dbUser.password;
+		dbUser.token = await createJwtToken(dbUser.username);
 		successResponse(context, dbUser);
 	} catch(err: any) {
 		return await errorResponse(context, err, 403);	
