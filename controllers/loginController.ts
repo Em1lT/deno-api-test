@@ -14,7 +14,9 @@ const registerUser: HandlerFunc = async (context: any) => {
 	const user: User = await <User> context.body;
 	try {
 		const response: any = await register(user);
-		const createdUser: User = await getOne(response.lastInsertId); 
+		const createdUser: User = await getOne(response.lastInsertId);
+		//createdUser.password = undefined;
+		delete createdUser.password;
 		successResponse(context, createdUser);
 	} catch(err: any) {
 		errorResponse(context, err, 403);	
@@ -23,5 +25,14 @@ const registerUser: HandlerFunc = async (context: any) => {
 
 
 const loginUser: Function = async (context: any) => {
-	errorResponse("err", context, 403);
+	const user: User = await <User> context.body;
+	try {
+		const DbUser: User = await getOne(user.firstname);
+
+		//Compare password hash
+		//return user / error
+		successResponse(context, createdUser);
+	} catch(err: any) {
+		errorResponse(context, err, 403);	
+	}
 }
