@@ -1,6 +1,6 @@
 export interface Note {
-	id: String;
-	message: String;
+	id: string;
+	message: string;
 	createdAt: Date;
 	updatedAt: Date;
 }
