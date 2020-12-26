@@ -40,9 +40,20 @@ export const getOne: Function = async (id: number) => {
 		const response: User[] = await client.query('SELECT * FROM `demo-api`.users WHERE id = '+ id + ' LIMIT 1;');
 		return response[0];
 	} catch (e: any) {
-		return await e;
+		throw new Error(e);
 	}
 }
+
+export const getByName: Function = async (name: string) => {
+	try {
+		const client  = sqlConnection;	
+		const response: User[] = await client.query('SELECT * FROM `demo-api`.users WHERE username = "'+ name + '" LIMIT 1;');
+		return response[0];
+	} catch (e: any) {
+		throw new Error(e);
+	}
+}
+
 
 const checkUser = (user: User): User => {
 		if(!user.firstname || user.firstname.length <= 2) {

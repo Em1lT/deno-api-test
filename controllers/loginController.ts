@@ -1,11 +1,12 @@
 import { HandlerFunc  } from "https://deno.land/x/abc/types.ts";
 import { successResponse, errorResponse } from "../handlers/responseHandler.ts"
 import { User } from "../models/interfaces/user.ts"
-import { register, login, getOne } from "../models/userModel.ts"
+import { register, login, getOne, getByName } from "../models/userModel.ts"
+import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 
 export const loginController  = (app: any) => {
 
-	app.get("/login", loginUser)	
+	app.post("/login", loginUser)	
 	.post("/register", registerUser)
 	console.log("loginController enabled!");
 }
@@ -15,11 +16,10 @@ const registerUser: HandlerFunc = async (context: any) => {
 	try {
 		const response: any = await register(user);
 		const createdUser: User = await getOne(response.lastInsertId);
-		//createdUser.password = undefined;
 		delete createdUser.password;
 		successResponse(context, createdUser);
 	} catch(err: any) {
-		errorResponse(context, err, 403);	
+		return await errorResponse(context, err, 403);	
 	}
 }
 
@@ -27,12 +27,17 @@ const registerUser: HandlerFunc = async (context: any) => {
 const loginUser: Function = async (context: any) => {
 	const user: User = await <User> context.body;
 	try {
-		const DbUser: User = await getOne(user.firstname);
-
-		//Compare password hash
-		//return user / error
-		successResponse(context, createdUser);
+		const dbUser: User = await getByName(user.username);
+		if(!dbUser) {
+			return await errorResponse(context, "No user!", 400);
+		}
+		const comparedHash = await bcrypt.compare(user.password!, dbUser.password!);	
+		if(!comparedHash) {
+			return await errorResponse(context, "Wrong password!", 400);
+		}
+		delete dbUser.password;
+		successResponse(context, dbUser);
 	} catch(err: any) {
-		errorResponse(context, err, 403);	
+		return await errorResponse(context, err, 403);	
 	}
 }
