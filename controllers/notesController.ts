@@ -4,6 +4,7 @@ import { getAll as NotesGetAll, getOne, postOne, putOne, deleteOne } from "../mo
 import { Note } from "../models/interfaces/note.ts";
 import { successResponse, errorResponse } from "../handlers/responseHandler.ts";
 import { auth } from "./authController.ts";
+import { verifyToken } from "../helpers/jwt.ts";
 
 export const notesController  = (app: any) => {
 
@@ -19,7 +20,9 @@ export const notesController  = (app: any) => {
 //TODO: Handle params
 const getAllNotes: HandlerFunc = async (context: Context) => {	
 	try {
-		const allNotes = await NotesGetAll() 
+
+		const user: any = await checkToken(context.request.headers.get('authorization'));
+		const allNotes = await NotesGetAll(user); 
 		successResponse(context, allNotes);
 	} catch (e) {
 		errorResponse(context, e, 403);
@@ -80,4 +83,12 @@ const deleteNote: HandlerFunc = async (context: Context) => {
 	}
 }
 
+const checkToken: Function = async (auth: string) => {
+	const token: string = auth.replace(/^Bearer\s+/, "");
+	const validToken: any = await verifyToken(token); 
+	if(!validToken) {
+		throw new Error("Bearer token is not valid!");
+	}
+	return validToken;
+}
 

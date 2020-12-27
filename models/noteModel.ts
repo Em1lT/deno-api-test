@@ -1,13 +1,12 @@
 //Class to handle mysql queries and return
 import { sqlConnection } from "../database/sqlConnection.ts"
 import { Note } from "./interfaces/note.ts"
+import { User } from "./interfaces/user.ts"
 
-
-
-export const getAll: Function = async () => {
+export const getAll: Function = async (user: User) => {
 	const client  = sqlConnection;
 	try {
-		return await client.query('SELECT * FROM `demo-api`.notes;');
+		return await client.query('SELECT * FROM `demo-api`.notes WHERE userId = '+user.id+';');
 	} catch (e: any) {
 		return await e;
 	}
@@ -18,6 +17,7 @@ export const getOne: Function = async (id: number) => {
 		const client  = sqlConnection;	
 		return await client.query('SELECT * FROM `demo-api`.notes WHERE id = '+ id + ';');
 	} catch (e: any) {
+		console.log(e);
 		return await e;
 	}
 }
@@ -28,6 +28,7 @@ export const postOne: Function = async (message: String) => {
 		const queue = await client.execute('INSERT INTO `demo-api`.notes (`message`) VALUES ("'+message+'");');	
 		return await getOne(queue.lastInsertId!);
 	} catch (e: any) {
+		console.log(e);
 		return await e;
 	}
 }
