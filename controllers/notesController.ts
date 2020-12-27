@@ -18,11 +18,9 @@ export const notesController  = (app: any) => {
 }
 
 //TODO: Handle params
-const getAllNotes: HandlerFunc = async (context: Context) => {	
+const getAllNotes: HandlerFunc = async (context: any) => {	
 	try {
-
-		const user: any = await checkToken(context.request.headers.get('authorization'));
-		const allNotes = await NotesGetAll(user); 
+		const allNotes = await NotesGetAll(context.user.token); 
 		successResponse(context, allNotes);
 	} catch (e) {
 		errorResponse(context, e, 403);

@@ -1,4 +1,4 @@
-import { create, verify } from "https://deno.land/x/djwt@v2.0/mod.ts"
+import { create, verify, decode } from "https://deno.land/x/djwt@v2.0/mod.ts"
 import "https://deno.land/x/dotenv/load.ts";
 import { User } from "../models/interfaces/user.ts"
 
@@ -7,6 +7,16 @@ const type: string | undefined = Deno.env.get("type");
 
 export const createJwtToken: Function = async (user: User) => {
 	return await create({ alg: "HS256", typ: type! }, { token: user }, secret!);
+}
+
+export const decodeJwtToken: Function = async (jwt: string) => {
+	let validToken: any = null;
+	try {
+		validToken = await verify(jwt, secret!, "HS256");
+	} catch(error: any) {
+		return null;
+	}
+	return validToken;
 }
 
 export const verifyToken: Function = async (token: string) => {
