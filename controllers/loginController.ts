@@ -37,7 +37,7 @@ const loginUser: Function = async (context: any) => {
 			return await errorResponse(context, "Wrong password!", 400);
 		}
 		delete dbUser.password;
-		dbUser.token = await createJwtToken(dbUser.username);
+		dbUser.token = await createJwtToken(dbUser);
 		successResponse(context, dbUser);
 	} catch(err: any) {
 		return await errorResponse(context, err, 403);	
