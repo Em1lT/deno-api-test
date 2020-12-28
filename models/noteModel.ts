@@ -6,7 +6,7 @@ import { User } from "./interfaces/user.ts"
 export const getAll: Function = async (user: User) => {
 	const client  = sqlConnection;
 	try {
-		return await client.query('SELECT * FROM `demo-api`.notes WHERE userId = '+user.id+';');
+		return await client.query('SELECT * FROM `demo-api`.notes WHERE userId = ?;' ,[user.id]);
 	} catch (e: any) {
 		return await e;
 	}
