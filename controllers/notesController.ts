@@ -17,7 +17,6 @@ export const notesController  = (app: any) => {
 	console.log("notesController enabled!");
 }
 
-//TODO: Handle params
 const getAllNotes: HandlerFunc = async (context: any) => {	
 	try {
 		const allNotes = await NotesGetAll(context.user.token); 
@@ -28,10 +27,10 @@ const getAllNotes: HandlerFunc = async (context: any) => {
 	
 }
 
-const getOneNote: HandlerFunc = async (context: Context) => {
+const getOneNote: HandlerFunc = async (context: any) => {
 	const { id } = await context.params as any;
 	try {
-		const noteWithId = await getOne(id);
+		const noteWithId = await getOne(id, context.user.token);
 		successResponse(context, noteWithId);
 	} catch(error: any) {
 		errorResponse(context, error, 403);

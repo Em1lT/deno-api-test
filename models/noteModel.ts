@@ -12,10 +12,10 @@ export const getAll: Function = async (user: User) => {
 	}
 }
 
-export const getOne: Function = async (id: number) => {
+export const getOne: Function = async (id: number, user: User) => {
 	try {
 		const client  = sqlConnection;	
-		return await client.query('SELECT * FROM `demo-api`.notes WHERE id = '+ id + ';');
+		return await client.query('SELECT * FROM `demo-api`.notes WHERE id = ? AND userId = ?;', [id, user.id]);
 	} catch (e: any) {
 		console.log(e);
 		return await e;
