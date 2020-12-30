@@ -1,12 +1,12 @@
 //Class to handle mysql queries and return
 import { sqlConnection } from "../database/sqlConnection.ts"
+import { select } from "../database/queries.ts"
 import { Note } from "./interfaces/note.ts"
 import { User } from "./interfaces/user.ts"
 
 export const getAll: Function = async (user: User) => {
-	const client  = sqlConnection;
 	try {
-		return await client.query('SELECT * FROM `demo-api`.notes WHERE userId = ?;' ,[user.id]);
+		return await select("notes", [], {"userId": user.id}, undefined);
 	} catch (e: any) {
 		return await e;
 	}
@@ -14,8 +14,7 @@ export const getAll: Function = async (user: User) => {
 
 export const getOne: Function = async (id: number, user: User) => {
 	try {
-		const client  = sqlConnection;	
-		return await client.query('SELECT * FROM `demo-api`.notes WHERE id = ? AND userId = ?;', [id, user.id]);
+		return await select("notes", [], {"userId": user.id, "id": id}, undefined);
 	} catch (e: any) {
 		console.log(e);
 		return await e;

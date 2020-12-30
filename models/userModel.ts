@@ -1,7 +1,10 @@
+'use strict'
+
 //Class to handle mysql queries and return
 import { sqlConnection } from "../database/sqlConnection.ts"
 import { User } from "../models/interfaces/user.ts"
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
+import { select } from "../database/queries.ts"
 const saltRounds: number = 8;
 
 export const login: Function = async () => {
@@ -47,7 +50,8 @@ export const getOne: Function = async (id: number) => {
 export const getByName: Function = async (name: string) => {
 	try {
 		const client  = sqlConnection;	
-		const response: User[] = await client.query('SELECT * FROM `demo-api`.users WHERE username = "'+ name + '" LIMIT 1;');
+		const response: User[] = await select( 'user', [], { 'username': name }, 1 );
+		//const response: User[] = await client.query('SELECT * FROM `demo-api`.users WHERE username = "'+ name + '" LIMIT 1;');
 		return response[0];
 	} catch (e: any) {
 		throw new Error(e);
