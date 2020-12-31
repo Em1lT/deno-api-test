@@ -1,6 +1,7 @@
 export interface Note {
-	id: string;
-	message: string;
-	createdAt: Date;
-	updatedAt: Date;
+	id?: string;
+	title?: string;
+	message?: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }

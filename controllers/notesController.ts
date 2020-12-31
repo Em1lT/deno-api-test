@@ -39,16 +39,15 @@ const getOneNote: HandlerFunc = async (context: any) => {
 
 
 //TODO: Validate context body
-const postNote: HandlerFunc = async (context: Context) => {
-	const { message } = await context.body as Note
-	if (message === undefined) {
-		errorResponse(context, "No message!", 403);
-		return;
+const postNote: HandlerFunc = async (context: any) => {
+	const note: Note  = await context.body as Note
+	if (note === undefined) {
+		return errorResponse(context, "No message!", 403);
 	}
 	try {
-		successResponse(context, await postOne(message));
+		successResponse(context, await postOne(note, context.user.token));
 	} catch (error: any) {
-		errorResponse(context, error, 403);
+		throw new Error(error);
 	}
 }
 	
@@ -62,7 +61,7 @@ const updateNote: HandlerFunc = async (context: Context) => {
 	try {
 		successResponse(context, await putOne(message, id));
 	} catch(error: any) {
-		errorResponse(context, error, 403);
+		throw new Error(error);
 	}
 }
 
@@ -70,13 +69,12 @@ const deleteNote: HandlerFunc = async (context: Context) => {
 	const { id } = await context.params as any;
 	console.log(id);
 	if (!id) {
-		errorResponse(context, "No id!", 403);
-		return;
+		return errorResponse(context, "No id!", 403);
 	}
 	try {
 		successResponse(context, await deleteOne(id));
 	} catch(error: any) {
-		errorResponse(context, error, 403);
+		throw new Error(error);
 	}
 }
 
