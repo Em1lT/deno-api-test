@@ -51,7 +51,7 @@ const postNote: HandlerFunc = async (context: any) => {
 	}
 }
 	
-const updateNote: HandlerFunc = async (context: Context) => {
+const updateNote: HandlerFunc = async (context: any) => {
 	const { message } = await context.body as Note
 	const { id } = await context.params as any;
 	if (message === undefined) {
@@ -59,7 +59,7 @@ const updateNote: HandlerFunc = async (context: Context) => {
 		return;
 	}
 	try {
-		successResponse(context, await putOne(message, id));
+		successResponse(context, await putOne(message, id, context.user.token));
 	} catch(error: any) {
 		throw new Error(error);
 	}

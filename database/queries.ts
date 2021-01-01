@@ -4,10 +4,8 @@ import { sqlConnection } from "../database/sqlConnection.ts"
 const client  = sqlConnection;
 
 
-export const select = async (table: string, columns: string[], where: any, limit?: number) => {	
-	
+export const select: Function  = async (table: string, columns: string[], where: any, limit?: number) => {	
 	let query: string = 'SELECT'
-
 	if(columns.length > 0) {
 		for(let item of columns) {
 			query += ", " + item;
@@ -15,9 +13,7 @@ export const select = async (table: string, columns: string[], where: any, limit
 	} else {
 		query += ' * '
 	}
-
 	query += ' FROM `demo-api`.' + table;
-
 	const fields: string[] = [];
 	if (where && Object.keys(where).length !== 0) {
 	        let values: string = "";
@@ -32,7 +28,6 @@ export const select = async (table: string, columns: string[], where: any, limit
 		query += " LIMIT " + limit
 	}
 	query += ';'
-	
 	try {
 		return await client.query(query, fields);
 	} catch(error: any) {
@@ -42,9 +37,7 @@ export const select = async (table: string, columns: string[], where: any, limit
 	
 }
 
-export const insert = async (table: string, updatedValues: any) => {	
-//const queue = await client.execute('INSERT INTO `demo-api`.notes (message, title, userId) VALUES (?,?,?);', [note.message, note.title, user.id ]);	
-
+export const insert: Function  = async (table: string, updatedValues: any) => {	
 	let query: string = 'INSERT INTO'
 	query += ' `demo-api`.' + table;
 	const fields: string[] = [];
@@ -61,7 +54,58 @@ export const insert = async (table: string, updatedValues: any) => {
 		query += questionMarks.toString().slice(0,-1) + ")";
 	}
 	query += ';'
-	return await client.query(query, fields);
+	try {
+		return await client.query(query, fields);
+	} catch(error: any) {
+		throw new Error(error);
+	}
 }
 
+export const update: Function  = async (table: string, updateValues: any, where: any) => {
+	let query: string = 'UPDATE'
+	query += ' `demo-api`.' + table + ' SET ';
+	const fields: string[] = [];
 
+	if (updateValues && Object.keys(updateValues).length !== 0) {
+	        let values: string = "";
+		for (let key in updateValues) {
+                	values += key + ' = ?, ';
+			fields.push(updateValues[key]);
+		 }
+        	query += values.toString().slice(0, -2);
+	}
+	
+	if (where && Object.keys(where).length !== 0) {
+	        let values: string = "";
+		for (let key in where) {
+                	values += (key + ' = ? AND ');
+			fields.push(where[key]);
+		 }
+        	query += ' WHERE ' + values.toString().slice(0, -5);
+        }
+	try {
+		return await client.query(query, fields);
+	} catch(error: any) {
+		throw new Error(error);
+	}
+}
+
+export const delet: Function = async (table: string, where: any) => {
+	
+	let query: string = 'DELETE FROM `demo-api`.' + table;
+
+	const fields: string[] = [];
+	if (where && Object.keys(where).length !== 0) {
+	        let values: string = "";
+		for (let key in where) {
+                	values += (key + ' = ? AND ');
+			fields.push(where[key]);
+		 }
+        	query += ' WHERE ' + values.toString().slice(0, -5);
+        }
+	try {
+		return await client.query(query, fields);
+	} catch(error: any) {
+		throw new Error(error);
+	}
+}

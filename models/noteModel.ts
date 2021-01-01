@@ -1,6 +1,6 @@
 //Class to handle mysql queries and return
 import { sqlConnection } from "../database/sqlConnection.ts"
-import { select, insert } from "../database/queries.ts"
+import { select, insert, update, delet } from "../database/queries.ts"
 import { Note } from "./interfaces/note.ts"
 import { User } from "./interfaces/user.ts"
 
@@ -21,7 +21,6 @@ export const getOne: Function = async (id: number, user: User) => {
 }
 
 export const postOne: Function = async (note: Note, user: User) => {
-	const client  = sqlConnection;
 	try {
 		const queue: any = await insert("notes", {message: note.message, title: note.title, userId: user.id });
 		return await getOne(queue.lastInsertId!, user);
@@ -30,10 +29,10 @@ export const postOne: Function = async (note: Note, user: User) => {
 	}
 }
 
-export const putOne: Function = async (message: String, id: number) => {
+export const putOne: Function = async (message: String, id: number, user: User) => {
 	const client  = sqlConnection;
 	try {
-		const queue = await client.execute('UPDATE `demo-api`.notes SET `message` =("'+message+'") WHERE (id = '+id+');');	
+		const queue = await update('notes', {message: message}, {id:id, userId: user.id})
 		return await getOne(id);
 	} catch (e: any) {
 		return await e;
@@ -43,7 +42,7 @@ export const putOne: Function = async (message: String, id: number) => {
 export const deleteOne: Function = async (id: number) => {
 	const client  = sqlConnection;
 	try {
-		const queue = await client.execute('DELETE FROM `demo-api`.notes WHERE (id = '+id+'');
+		await delet("notes", {id:id});
 		return await {status:"success", id: id};
 	} catch (e: any) {
 		throw new Error(e);
