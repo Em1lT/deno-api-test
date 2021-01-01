@@ -28,13 +28,7 @@ export const select: Function  = async (table: string, columns: string[], where:
 		query += " LIMIT " + limit
 	}
 	query += ';'
-	try {
-		return await client.query(query, fields);
-	} catch(error: any) {
-		throw new Error(error);
-	}
-
-	
+	return await client.query(query, fields);
 }
 
 export const insert: Function  = async (table: string, updatedValues: any) => {	
@@ -54,11 +48,7 @@ export const insert: Function  = async (table: string, updatedValues: any) => {
 		query += questionMarks.toString().slice(0,-1) + ")";
 	}
 	query += ';'
-	try {
-		return await client.query(query, fields);
-	} catch(error: any) {
-		throw new Error(error);
-	}
+	return await client.query(query, fields);
 }
 
 export const update: Function  = async (table: string, updateValues: any, where: any) => {
@@ -83,11 +73,7 @@ export const update: Function  = async (table: string, updateValues: any, where:
 		 }
         	query += ' WHERE ' + values.toString().slice(0, -5);
         }
-	try {
-		return await client.query(query, fields);
-	} catch(error: any) {
-		throw new Error(error);
-	}
+	return await client.query(query, fields);
 }
 
 export const delet: Function = async (table: string, where: any) => {
@@ -103,9 +89,5 @@ export const delet: Function = async (table: string, where: any) => {
 		 }
         	query += ' WHERE ' + values.toString().slice(0, -5);
         }
-	try {
-		return await client.query(query, fields);
-	} catch(error: any) {
-		throw new Error(error);
-	}
+	return await client.query(query, fields);
 }

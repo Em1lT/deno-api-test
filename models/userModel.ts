@@ -4,54 +4,30 @@
 import { sqlConnection } from "../database/sqlConnection.ts"
 import { User } from "../models/interfaces/user.ts"
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
-import { select, insert } from "../database/queries.ts"
+import { select, insert, delet } from "../database/queries.ts"
 const saltRounds: number = 8;
 
-export const login: Function = async () => {
-	const client  = sqlConnection;
-	try {
-		return await client.query('SELECT * FROM `demo-api`.user;');
-	} catch (e: any) {
-		return await e;
-	}
+export const register: Function = async (user: User) => {
+	checkUser(user);
+	const salt = await bcrypt.genSalt(8);
+	user.password = await bcrypt.hash(user.password!, salt)	
+	return await insert("users", {firstname: user.firstname, lastname: user.lastname, password: user.password, username:  user.username });
 }
 
-export const register: Function = async (user: User) => {
-	try {
-		checkUser(user);
-		const salt = await bcrypt.genSalt(8);
-		user.password = await bcrypt.hash(user.password!, salt)	
-		return await insert("users", {firstname: user.firstname, lastname: user.lastname, password: user.password, username:  user.username });
-	} catch (e: any) {
-		throw new Error(e);
-	}
-}
 export const deleteOne: Function = async (id: number) => {
 	const client  = sqlConnection;
-	try {
-		const queue = await client.execute('DELETE FROM `demo-api`.users WHERE (id = '+id+'');
-		return await {status:"success", id: id};
-	} catch (e: any) {
-		throw new Error(e);
-	}
+	await delet('users', { id: id })
+	return await {status:"success", id: id};
 }
 
 export const getOne: Function = async (id: number) => {
-	try {
-		return await select("users", [], {id: id}, undefined);
-	} catch (e: any) {
-		throw new Error(e);
-	}
+	return await select("users", [], {id: id}, undefined);
 }
 
 export const getByName: Function = async (name: string) => {
-	try {
-		const client  = sqlConnection;	
-		const response: User[] = await select( 'user', [], { 'username': name }, 1 );
-		return response[0];
-	} catch (e: any) {
-		throw new Error(e);
-	}
+	const client  = sqlConnection;	
+	const response: User[] = await select( 'users', [], { username: name }, 1 );
+	return response[0];
 }
 
 

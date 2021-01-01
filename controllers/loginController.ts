@@ -1,7 +1,7 @@
 import { HandlerFunc  } from "https://deno.land/x/abc/types.ts";
 import { successResponse, errorResponse } from "../handlers/responseHandler.ts"
 import { User } from "../models/interfaces/user.ts"
-import { register, login, getOne, getByName } from "../models/userModel.ts"
+import { register, getOne, getByName } from "../models/userModel.ts"
 import { createJwtToken } from '../helpers/jwt.ts'
 import * as bcrypt from "https://deno.land/x/bcrypt/mod.ts";
 
@@ -30,7 +30,7 @@ const loginUser: Function = async (context: any) => {
 	try {
 		const dbUser: User = await getByName(user.username);
 		if(!dbUser) {
-			return await errorResponse(context, "No user!", 400);
+			return await errorResponse(context, "No username!", 400);
 		}
 		const comparedHash = await bcrypt.compare(user.password!, dbUser.password!);	
 		if(!comparedHash) {

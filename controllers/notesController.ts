@@ -37,12 +37,10 @@ const getOneNote: HandlerFunc = async (context: any) => {
 	}
 }
 
-
-//TODO: Validate context body
 const postNote: HandlerFunc = async (context: any) => {
 	const note: Note  = await context.body as Note
 	if (note === undefined) {
-		return errorResponse(context, "No message!", 403);
+		errorResponse(context, "No message!", 403);
 	}
 	try {
 		successResponse(context, await postOne(note, context.user.token));
