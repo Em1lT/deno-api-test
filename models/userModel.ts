@@ -25,7 +25,6 @@ export const getOne: Function = async (id: number) => {
 }
 
 export const getByName: Function = async (name: string) => {
-	const client  = sqlConnection;	
 	const response: User[] = await select( 'users', [], { username: name }, 1 );
 	return response[0];
 }

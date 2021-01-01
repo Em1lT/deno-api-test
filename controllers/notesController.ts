@@ -50,14 +50,13 @@ const postNote: HandlerFunc = async (context: any) => {
 }
 	
 const updateNote: HandlerFunc = async (context: any) => {
-	const { message } = await context.body as Note
+	const note: Note = await context.body as Note
 	const { id } = await context.params as any;
-	if (message === undefined) {
-		errorResponse(context, "No message or id!", 403);
-		return;
+	if (!note && !id) {
+		return errorResponse(context, "No message or id!", 403);
 	}
 	try {
-		successResponse(context, await putOne(message, id, context.user.token));
+		successResponse(context, await putOne(note, id, context.user.token));
 	} catch(error: any) {
 		throw new Error(error);
 	}
