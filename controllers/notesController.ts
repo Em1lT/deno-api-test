@@ -6,13 +6,13 @@ import { successResponse, errorResponse } from "../handlers/responseHandler.ts";
 import { auth } from "./authController.ts";
 import { verifyToken } from "../helpers/jwt.ts";
 
-export const notesController  = (app: any) => {
+export const notesController: Function  = (app: any, endpoint: string) => {
 
-	app.get("/notes",  getAllNotes, auth)
-	.get("/notes/:id", getOneNote, auth)
-	.post("/notes", postNote, auth)
-	.put("/notes/:id", updateNote, auth)
-	.delete("/notes/:id", deleteNote, auth);
+	app.get(endpoint,  getAllNotes, auth)
+	.get(endpoint +"/:id", getOneNote, auth)
+	.post(endpoint, postNote, auth)
+	.put(endpoint + ":id", updateNote, auth)
+	.delete(endpoint +"/:id", deleteNote, auth);
 
 	console.log("notesController enabled!");
 }
