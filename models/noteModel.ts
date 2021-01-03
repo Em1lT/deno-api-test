@@ -1,3 +1,5 @@
+'use strict'
+
 //Class to handle mysql queries and return
 import { sqlConnection } from "../database/sqlConnection.ts"
 import { select, insert, update, delet } from "../database/queries.ts"

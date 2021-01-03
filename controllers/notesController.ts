@@ -1,3 +1,5 @@
+'use strict'
+
 import { HandlerFunc } from "https://deno.land/x/abc/types.ts";
 import { Context } from "https://deno.land/x/abc/mod.ts";
 import { getAll as NotesGetAll, getOne, postOne, putOne, deleteOne } from "../models/noteModel.ts"

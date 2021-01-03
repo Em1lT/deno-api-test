@@ -3,13 +3,53 @@
 import { sqlConnection } from "../database/sqlConnection.ts"
 const client  = sqlConnection;
 
+export const joinSelect: Function  = async (table: string, columns: string[], where: any, joinTable: string, on: any, limit?: number) => {	
+	let query: string = 'SELECT'
+	if(columns.length > 0) {
+		let columnValues = '';
+		for(let item of columns) {
+			columnValues += ' '+ item + ',' ;
+		}
+		query += columnValues.toString().slice(0,-1);
+	} else {
+		query += ' * '
+	}
+	query += ' FROM `demo-api`.' + table;
+	const fields: string[] = [];
+	
+	if(joinTable && on && Object.keys(on).length !== 0) {
+		query += ' JOIN ' + joinTable + ' ON ';
+		let values = "";
+		for (let key in on) {
+			values += key + ' = ' + on[key]	
+		}
+        	query += values.toString();
+	}
+
+	if (where && Object.keys(where).length !== 0) {
+	        let values: string = "";
+		for (let key in where) {
+                	values += (key + ' = ? AND ');
+			fields.push(where[key]);
+		 }
+        	query += ' WHERE ' + values.toString().slice(0, -5);
+        }
+
+	if(limit) {
+		query += " LIMIT " + limit
+	}
+	query += ';'
+	return await client.query(query, fields);
+}
 
 export const select: Function  = async (table: string, columns: string[], where: any, limit?: number) => {	
 	let query: string = 'SELECT'
 	if(columns.length > 0) {
+		let columnValues = '';
 		for(let item of columns) {
-			query += ", " + item;
+			columnValues += ' '+ item + ',' ;
 		}
+		query += columnValues.toString().slice(0,-1);
 	} else {
 		query += ' * '
 	}
