@@ -20,8 +20,9 @@ export const deleteOne: Function = async (id: number) => {
 	return await {status:"success", id: id};
 }
 
-export const getOne: Function = async (id: number) => {
-	return await select("users", [], {id: id}, undefined);
+export const getOne: Function = async (id: number): Promise<User> => {
+	const response: User[] = await select("users", [], {id: id}, undefined);
+	return response[0];
 }
 
 export const getByName: Function = async (name: string) => {
