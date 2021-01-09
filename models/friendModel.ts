@@ -12,8 +12,15 @@ export const getOne: Function = async (id: number, user: User): Promise<any> => 
 	return await joinSelect('friends', ['users.username'], {userId: user.id, 'friends.id': id}, 'users',{'friends.friendId': 'users.id'})
 }
 
+export const deleteOne: Function = async (id: number, user: User): Promise<any> => {
+	//return await select("friends", [], {userId: user.id, id: id}, undefined);
+	const response: any = await delet('friends', { id: id });
+	return await {status:"success", id: id};
+}
+
 export const getWithFriendId: Function = async (id: number, user: User): Promise<any> => {
-	return await select('friends',{friendId: id, userId: user.id});
+	const response: any = await select('friends',{friendId: id, userId: user.id});
+	return response.length > 0 ? response[0] : undefined;
 }
 
 export const postOne: Function = async (id: any, user: User) => {
