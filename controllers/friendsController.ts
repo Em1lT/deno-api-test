@@ -8,13 +8,14 @@ import { auth } from "./authController.ts";
 import { sqlConnection } from "../database/sqlConnection.ts";
 import { getMany, postOne, getOne, getWithFriendId, deleteOne } from "../models/friendModel.ts";
 import { getOne as getUser } from "../models/userModel.ts";
+import { getAll as getNotes } from "../models/noteModel.ts";
 
 export const friendsController  = (app: any, endpoint: string) => {
 
 	app.get(endpoint + "/friends", getFriends, auth)	
 		.get(endpoint + "/friends/:id", getFriend, auth)
 		.post(endpoint +"/friends/add/:id", postFriends, auth) 
-		.post(endpoint +"/friends/:id/notes", friendsPostedNotes, auth) 
+		.get(endpoint +"/friends/:id/notes", friendsPostedNotes, auth) 
 		.delete(endpoint +"/friends/:id", removeFriend, auth) 
 	console.log("FriendsController enabled!");
 }
@@ -60,7 +61,12 @@ const friendsPostedNotes: HandlerFunc = async (context: any) => {
 	if(id == null || !context.user) {
 		return errorResponse(context, 'No id!', 403);
 	}
-	const response: any = await postOne(id, context.user.token);
+	const user: User = await getUser(id, context.user.token);
+	if(!user) {
+		return errorResponse(context, 'No user id found!');
+	}
+	//TODO: add users notes
+	const response: any = await getNotes(context.user.token, {userId: user.id});
 	try {
 		successResponse(context, response);
 	} catch(error: any) {

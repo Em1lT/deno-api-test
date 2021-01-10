@@ -39,8 +39,7 @@ export const joinSelect: Function  = async (table: string, columns: string[], wh
 		query += " LIMIT " + limit
 	}
 	query += ';'
-	//LOG THESE
-	console.log('[ QUERY ]' + query +" [ FIELDS ] "+ fields);
+	log(query, fields);
 	return await client.query(query, fields);
 }
 
@@ -70,7 +69,7 @@ export const select: Function  = async (table: string, columns: string[], where:
 		query += " LIMIT " + limit
 	}
 	query += ';'
-	console.log('[ QUERY ]' + query +" [ FIELDS ] "+ fields);
+	log(query, fields);
 	return await client.query(query, fields);
 }
 
@@ -91,7 +90,7 @@ export const insert: Function  = async (table: string, updatedValues: any) => {
 		query += questionMarks.toString().slice(0,-1) + ")";
 	}
 	query += ';'
-	console.log('[ QUERY ]' + query +" [ FIELDS ] "+ fields);
+	log(query, fields);
 	return await client.query(query, fields);
 }
 
@@ -117,7 +116,7 @@ export const update: Function  = async (table: string, updateValues: any, where:
 		 }
         	query += ' WHERE ' + values.toString().slice(0, -5);
         }
-	console.log('[ QUERY ]' + query +" [ FIELDS ] "+ fields);
+	log(query, fields);
 	return await client.query(query, fields);
 }
 
@@ -134,6 +133,17 @@ export const delet: Function = async (table: string, where: any) => {
 		 }
         	query += ' WHERE ' + values.toString().slice(0, -5);
         }
-	console.log('[ QUERY ]' + query +" [ FIELDS ] "+ fields);
+	log(query, fields);
 	return await client.query(query, fields);
+}
+
+const log: Function = (query: string, fields: any) => {
+	const id: string = createId();
+	console.log('[ QUERY ]'+ ' [ ' +id+ ' ] ' + query);
+	console.log('[ FIELDS ]' + ' [ ' +id+ ' ] ' + fields);
+}
+
+
+const createId: Function = (): string => {
+	return "" + Math.floor(Math.random()* 9999) + "-" + Math.floor(Math.random()* 9999) + "-" + Math.floor(Math.random()* 9999) + "-" + Math.floor(Math.random()* 9999);  
 }

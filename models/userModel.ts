@@ -20,14 +20,14 @@ export const deleteOne: Function = async (id: number) => {
 	return await {status:"success", id: id};
 }
 
-export const getOne: Function = async (id: number): Promise<User> => {
+export const getOne: Function = async (id: number): Promise<User | undefined> => {
 	const response: User[] = await select("users", [], {id: id}, undefined);
-	return response[0];
+	return response.length > 0 ? response[0] : undefined;
 }
 
-export const getByName: Function = async (name: string) => {
+export const getByName: Function = async (name: string): Promise<any> => {
 	const response: User[] = await select( 'users', [], { username: name }, 1 );
-	return response[0];
+	return response.length > 0 ? response[0] : undefined;
 }
 
 
