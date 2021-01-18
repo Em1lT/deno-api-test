@@ -43,8 +43,9 @@ export const joinSelect: Function  = async (table: string, columns: string[], wh
 	return await client.query(query, fields);
 }
 
-export const select: Function  = async (table: string, columns: string[], where: any, limit?: number) => {	
+export const select: Function  = async (table: string, columns: string[], where: any, or?: string, limit?: number) => {	
 	let query: string = 'SELECT'
+	const or: string = or ? 'OR': 'AND'; 
 	if(columns.length > 0) {
 		let columnValues = '';
 		for(let item of columns) {
@@ -59,7 +60,7 @@ export const select: Function  = async (table: string, columns: string[], where:
 	if (where && Object.keys(where).length !== 0) {
 	        let values: string = "";
 		for (let key in where) {
-                	values += (key + ' = ? AND ');
+                	values += (key + ' = ? ' + or + ' ');
 			fields.push(where[key]);
 		 }
         	query += ' WHERE ' + values.toString().slice(0, -5);

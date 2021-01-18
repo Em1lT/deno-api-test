@@ -6,9 +6,9 @@ import { select, insert, update, delet } from "../database/queries.ts"
 import { Note } from "./interfaces/note.ts"
 import { User } from "./interfaces/user.ts"
 
-export const getAll: Function = async (user: User, params: any) => {
+export const getAll: Function = async (user: User, params: any, or?: boolean) => {
 	if(params) {
-		return await select("notes", [], params, undefined);
+		return await select("notes", [], params, or, undefined);
 	} else {
 		return await select("notes", [], {userId: user.id}, undefined);
 	}

@@ -13,6 +13,7 @@ import { getAll as getNotes } from "../models/noteModel.ts";
 export const friendsController  = (app: any, endpoint: string) => {
 
 	app.get(endpoint + "/friends", getFriends, auth)	
+		.get(endpoint + "/friends/notes", getFriendNotes, auth)
 		.get(endpoint + "/friends/:id", getFriend, auth)
 		.post(endpoint +"/friends/add/:id", postFriends, auth) 
 		.get(endpoint +"/friends/:id/notes", friendsPostedNotes, auth) 
@@ -31,7 +32,7 @@ const getFriend: HandlerFunc = async (context: any) => {
 }
 
 const removeFriend: HandlerFunc = async (context: any) => {
-	const id = await context.params.id;
+	const id: number = await context.params.id;
 	if(id == null || !context.user) {
 		return errorResponse(context, 'No id!', 403);
 	}
@@ -46,6 +47,14 @@ const removeFriend: HandlerFunc = async (context: any) => {
 		return errorResponse(context, error, 403);
 	}
 }
+const getFriendNotes: HandlerFunc = async (context: any) => {
+	const response: any = await getNotes(context.user.token, {userId: user.id});
+	try {
+		successResponse(context, response);
+	} catch(error: any) {
+		return errorResponse(context, error, 403);
+	}
+}
 
 const getFriends: HandlerFunc = async (context: any) => {
 	try {
@@ -57,7 +66,7 @@ const getFriends: HandlerFunc = async (context: any) => {
 }
 
 const friendsPostedNotes: HandlerFunc = async (context: any) => {
-	const id = await context.params.id;
+	const id: number = await context.params.id;
 	if(id == null || !context.user) {
 		return errorResponse(context, 'No id!', 403);
 	}
@@ -65,7 +74,6 @@ const friendsPostedNotes: HandlerFunc = async (context: any) => {
 	if(!user) {
 		return errorResponse(context, 'No user id found!');
 	}
-	//TODO: add users notes
 	const response: any = await getNotes(context.user.token, {userId: user.id});
 	try {
 		successResponse(context, response);
